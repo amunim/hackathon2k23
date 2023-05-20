@@ -1,9 +1,9 @@
 export default function AddEvent({onBlur}) {
     return (
-        <div tabIndex={0} onBlur={onBlur} className='rounded-lg shadow-lg px-4 w-56 py-1'>
-            <div>
+        <div tabIndex={6} onBlur={onBlur} className='rounded-lg shadow-lg px-4 w-56 py-1 bg-white z-[100000]'>
+            <div className="bg-white">
                 <h6 className='font-semibold mb-1'>Add Event</h6>
-                <form>
+                <form className="bg-white">
                     <input className='border-[#ECECEC] border-2 border-solid rounded w-full px-2 mb-4' type='text' placeholder='Title' />
                     <textarea className='border-[#ECECEC] border-2 border-solid rounded w-full px-2 mb-4' type='text' placeholder='Description' rows={5}>
                     </textarea>

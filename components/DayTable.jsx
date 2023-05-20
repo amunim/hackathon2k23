@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 import AddEvent from "./AddEvent";
 
 export default function DayTable({ timings }) {
@@ -9,18 +9,15 @@ export default function DayTable({ timings }) {
     const [modalPos, setModalPos] = useState({});
 
 
-    const [scrollPosition, setScrollPosition] = useState(0);
-    const handleScroll = () => {
-        const position = window.scrollY;
-        setScrollPosition(position);
-    };
 
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll, { passive: true });
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
+    const [scrollPosition, setPosition] = useState(0);
+    useLayoutEffect(() => {
+        function updatePosition() {
+            setPosition(window.pageYOffset);
+        }
+        window.addEventListener('scroll', updatePosition, false);
+        updatePosition();
+        return () => window.removeEventListener('scroll', updatePosition);
     }, []);
 
     useEffect(() => {
@@ -46,7 +43,7 @@ export default function DayTable({ timings }) {
 
     return (
         <>
-            <div className="absolute" style={{ display: showModal ? "block" : "none", top: `${modalPos.y + scrollY}px`, left: `${modalPos.x}px` }}>
+            <div className="fixed" style={{ display: showModal ? "block" : "none", top: `${modalPos.y - scrollPosition}px`, left: `${modalPos.x}px` }}>
                 <AddEvent onBlur={() => setShowModal(false)} />
             </div>
             <div className='flex flex-col'>
@@ -71,7 +68,6 @@ export default function DayTable({ timings }) {
                                 </div>
                             </div>
                             <div onClick={(ev) => setShowModal(true)} className='flex relative flex-col w-full overflow-y-hidden overflow-x-hidden'>
-
                                 <div className='w-full h-10 border-2 border-solid border-[#E8E8E8] border-b-[1px] overflow-y-visible'>
                                     <div className='h-20 w-full flex flex-wrap cursor-pointer'>
                                         {index == 0 &&
