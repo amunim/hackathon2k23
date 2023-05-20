@@ -1,3 +1,7 @@
+Runner up of hackathon 2k23, 6-hour coding competition to create a website from the following figma design
+https://www.figma.com/file/tJcS4hJX4OfLMJ0eoSXU2F/NUST-Hackathon-2023-Web-Front-End-Competition?type=design&node-id=7%3A580&t=DajS1g6Fh7NKJDqb-1
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
