@@ -2,10 +2,68 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
+import { useState } from 'react'
+import Header from 'components/Header'
+import Divider from 'components/Divider'
+import DayTable from 'components/DayTable'
+import MonthTable from 'components/MonthTable'
+import AgendaTable from 'components/AgendaTable'
+import WeekTable from 'components/WeekTable'
 
 const inter = Inter({ subsets: ['latin'] })
 
+export const daysOfMonth = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+]
+
+export const daysOfWeek = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+var groupBy = function (xs, key) {
+  return xs.reduce(function (rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+};
+
+const timings = ["12"].concat(new Array(12).fill(0).map((y, x) => (x + 1).toString().padStart(2, '0'))).concat(new Array(11).fill(0).map((y, x) => (x + 1).toString().padStart(2, '0')));
+
 export default function Home() {
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [calType, setCalType] = useState('Day');
+
+  const [events, setEvents] = useState([
+    {
+      date: new Date(),
+      title: "Event Title",
+      description: "The event description goes here.",
+      startTime: "1:00 AM",
+      endTime: "2:00 AM",
+      color: "#21FF2A"
+    }
+  ]);
+
+  const grouped = groupBy(events.filter(x => x.date.getMonth() == selectedDate.getMonth()), "date");
+
   return (
     <>
       <Head>
@@ -14,9 +72,15 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className='w-full h-full flex items-center justify-center'>
-        <div>Hello World</div>
-      </div>
+      <Header selectedDate={selectedDate} setSelectedDate={setSelectedDate} calType={calType} setCalType={setCalType} />
+      <Divider />
+      {calType == "Day" && <>
+        < div className='w-full text-center text-black text-xl py-2'>{daysOfWeek[selectedDate.getDay()]}</div >
+        <DayTable timings={timings} />
+      </>}
+      {calType == "Month" && <MonthTable selectedDate={selectedDate} />}
+      {calType == "Agenda" && <AgendaTable grouped={grouped} />}
+      {calType == "Week" && <WeekTable selectedDate={selectedDate} timings={timings} />}
     </>
   )
 }
